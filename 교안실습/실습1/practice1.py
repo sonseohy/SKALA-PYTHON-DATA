@@ -6,17 +6,21 @@
 # 프로그램 설명 : Sales 데이터를 컴프리헨션/defaultdict/Counter/제너레이터로 집계 분석하고 조건 검증
 #
 # 변경사항 내역 (날짜, 변경목적, 변경내용 순으로 기입)
-#
+# 2026-07-20, 예외 처리코드 추가, JSON 파일 로드 시 FileNotFoundError 예외처리 추가
 # ---------------------------------------------
 
 # 1) 리스트/딕셔너리 컴프리헨션
 import json
 from pathlib import Path    # 파일 경로를 객체로 다루는 라이브러리
 
-# JSON 파일 로드
-# Path(): 파일 경로를 Path 객체로 생성
-content = Path('Python_Practice2_Data.json').read_text()    # read_text(): 파일을 텍스트로 읽기ㄴ
-data = json.loads(content)  # JSON 파싱
+# JSON 파일 로드 - 예외처리
+try:
+    # Path(): 파일 경로를 Path 객체로 생성
+    content = Path('Python_Practice2_Data.json').read_text()    # read_text(): 파일을 텍스트로 읽기
+    data = json.loads(content)  # JSON 파싱
+except FileNotFoundError:
+    print("파일을 찾을 수 없습니다.")
+    data = []
 
 # 1. amount >= 1000인 거래 필터링
 filtering = [item for item in data if item['amount'] >= 1000]
