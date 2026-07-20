@@ -20,6 +20,7 @@ async def do_request(item_id, client, attempt):
         return {'id': item_id, 'ok': True}
 
     await asyncio.sleep(0.1)  # 네트워크 대기 상황
+    # if item_id == FAIL_ONCE_ID: # 테스트
     if item_id == FAIL_ONCE_ID and attempt == 0:
         raise ValueError('boom')  # 일시적 실패 상황
     return {'id': item_id, 'ok': True}
