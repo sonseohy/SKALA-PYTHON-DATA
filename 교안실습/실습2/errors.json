@@ -1,0 +1,26 @@
+[
+  {
+    "row": {
+      "region": "",
+      "month": "2024-01",
+      "amount": 500
+    },
+    "error": "1 validation error for SalesRecord\nregion\n  Value error, 비어있으면 안 됩니다. [type=value_error, input_value='', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+  },
+  {
+    "row": {
+      "region": "부산",
+      "month": "",
+      "amount": 300
+    },
+    "error": "1 validation error for SalesRecord\nmonth\n  Value error, 비어있으면 안 됩니다. [type=value_error, input_value='', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+  },
+  {
+    "row": {
+      "region": "대구",
+      "month": "2024-02",
+      "amount": -50
+    },
+    "error": "1 validation error for SalesRecord\namount\n  Value error, amount는 0보다 커야 합니다. [type=value_error, input_value=-50, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+  }
+]
