@@ -1,0 +1,8 @@
+# crontab -e 로 열어서 추가
+0 9 * * * cd /path/skala_python && .venv/bin/python capstone03_automation/report.py
+# 분 시 일 월 요일 → '0 9 * * *' = 매일 09시 00분
+#
+# ★ cron 사용 시 3대 주의:
+# ① 반드시 '절대 경로' 사용 (cron은 현재 폴더를 모릅니다)
+# ② 가상환경 python 을 직접 지정 (.venv/bin/python)
+# ③ 로그를 남기세요: >> /path/log.txt 2>&1
