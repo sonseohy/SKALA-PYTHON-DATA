@@ -1,0 +1,14 @@
+종합실습 2 - 결과물 평가
+
+- guide의 step0~step7 코드를 하나씩 따라가며 EDA(Polars 집계) → 시각화(Plotly) → 통계 검정(t-검정/카이제곱) → 전처리(ColumnTransformer) → 모델 학습(RandomForest) → 평가·저장(ROC-AUC, joblib)으로 이어지는 전체 흐름을 하나의 capstone02_eda_ml/analysis.py로 합쳐서 작성
+- churn 컬럼이 'Yes'/'No' 문자열이 아니라 0/1 정수 코드인 걸 확인하고, t-검정/카이제곱/모델 타겟(y) 정의를 모두 이 기준에 맞게 수정
+- 성공 판정 기준(t-검정 p≈1.2e-20, 카이제곱 p≈1.3e-70, ROC-AUC≈0.66, output/ 산출물, random_state=42 재현성)에 맞춰 두 차례 재실행해 동일한 수치가 나오는 것을 확인
+
+[잘한 점]
+- 통계 검정 결과와 ROC-AUC를 성공 기준 수치와 하나씩 대조해서 표로 확인하며 기준을 실제로 만족하는지 검증했다.
+- step6.py처럼 에러 없이 조용히 끝나는 코드가 사실은 churn == 'Yes' 비교가 항상 False가 되어 라벨이 전부 0으로 학습되는 숨은 버그라는 걸, print문이 없어서 조용히 넘어갈 뻔한 걸 직접 실행해보고 predict_proba의 IndexError로 확인해서 잡아냈다.
+- 성공 판정 기준의 실행 경로(`capstone02_eda_ml/analysis.py`)에 맞춰 파일 위치와 CSV/output 상대경로를 스크립트 기준 절대경로로 다시 잡아서, 어느 디렉토리에서 실행해도 같은 결과가 나오게 만들었다.
+
+[어려웠던 점 / 개선할 점]
+- guide의 step 파일들이 서로 다른 컬럼명 표기(step5는 tenure/MonthlyCharges/TotalCharges/Contract/PaymentMethod/InternetService, 나머지 step은 tenure_months/monthly_charges 등 스네이크케이스)를 전제로 작성돼 있어서, 실제 telco_churn.csv 컬럼명과 하나씩 대조하며 어디가 왜 안 맞는지 찾아내는 과정이 가장 오래 걸렸다. 특히 InternetService는 원본 CSV에 대응하는 컬럼 자체가 없어서, 어떤 컬럼(num_services 등)으로 대체할지 데이터를 직접 확인하며 판단해야 했다.
+- ROC-AUC가 기준(≈0.66)에 못 미치는 0.635로 나왔는데, 이게 코드 문제인지 데이터 자체가 원본 Kaggle 데이터셋과 다른 synthetic 데이터라서 그런 건지 구분하는 데 시간이 걸렸다. gender/senior 등 추가 특징을 넣어봐도 큰 차이가 없어서 결국 데이터 차이로 결론지었는데, 다른 모델이나 하이퍼파라미터 튜닝을 시도해보면 더 좁혀질 수도 있을 것 같다.
