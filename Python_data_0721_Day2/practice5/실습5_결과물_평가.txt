@@ -1,0 +1,15 @@
+실습 5 - 결과물 평가
+
+- 같은 질의를 Pandas, Polars(Lazy), DuckDB(SQL) 세 엔진으로 각각 구현
+- duckdb.sql()로 CSV 파일을 별도 로드 과정 없이 SQL로 직접 질의해서 집계 수행
+- 세 엔진의 결과를 event_type 기준으로 정렬한 뒤 pd.testing.assert_frame_equal(atol=1e-6)로 비교해 결과 일치를 검증
+- 세 엔진의 실행 시간을 표로 정리해 Polars < DuckDB < Pandas 순서를 확인
+
+[잘한 점]
+- guide의 step1~5 코드를 하나씩 따라가며 Pandas 기준선 → Polars Lazy → DuckDB → 검증 → 벤치마크로 이어지는 전체 흐름을 순서대로 이해한 뒤 하나의 스크립트로 합쳐서 작성했다.
+- guide에 원래 제시된 예시 질의를 그대로 쓰지 않고, 어떤 event_type 행을 골라낼지 필터링 조건을 내가 직접 바꿔서 새롭게 질의를 정의했다. 그 질의에 맞춰 기존 가이드 코드(Pandas/Polars/DuckDB 구조)를 그대로 베끼지 않고 내가 정의한 조건에 맞게 응용해보면서, 코드의 각 부분이 왜 그렇게 짜여 있는지 한 번 더 생각하게 되어 더 공부가 됐다.
+- 세 엔진의 결과를 바로 비교하지 않고 event_type 기준 정렬과 reset_index로 형태를 맞춘 뒤 assert_frame_equal을 적용해서, "결과가 같다"는 것을 감으로 넘기지 않고 코드로 직접 검증했다.
+
+[어려웠던 점 / 개선할 점]
+- 세 엔진 결과를 바로 비교하면 정렬 순서·인덱스·컬럼 순서가 달라 assert_frame_equal이 실패하고, 정렬(sort_values/sort)과 reset_index로 형태를 맞춘 뒤에야 비교가 가능하다는 점을 코드를 작성하며 알게 되었다.
+- 지금은 guide와 동일한 단일 질의만 비교했는데, 조건절이나 그룹 기준을 다르게 바꿔가며 여러 질의로 비교해보면 Polars/DuckDB가 어떤 경우에 더 유리한지 더 폭넓게 확인할 수 있을 것 같다.
